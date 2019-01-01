@@ -1,0 +1,49 @@
+<div class="container">
+    <form>
+        <div class="row">
+            <div class="col-md-6 someclass">
+                <p-dropdown [options]="cities1" [(ngModel)]="selectedCities1" name="abc" (onChange)="onsomeFunct($event)" optionLabel="label" placeholder="Select a Car"></p-dropdown>
+
+            </div>
+
+            <div class="col-md-6 someclass">
+                <p-dropdown [options]="cities2" [(ngModel)]="selectedCities2" name="xyz" optionLabel="label" [disabled]="cities2State" placeholder="Select a Car"></p-dropdown>
+            </div>
+
+            <div class="someclass btn btn-primary">
+                <button (click)="searchClick()">Search</button>
+            </div>
+
+
+        </div>
+    </form>
+</div>
+
+<div>
+    <!--   THis is the table displaying the cars after the user selection -->
+    <p-dataTable [value]="filteredCars"></p-dataTable>
+</div>
+
+
+<!--=======================================================================================================-->
+
+<!--<div id="tableModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            
+            <div class="modal-body">
+                PrimeNG Table
+                <div class="input-group">
+                    <input #gbSearch class="form-control py-2 border-right-0 border" type="search" placeholder="Search">
+                    <span class="input-group-append">
+                        <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
+                    </span>
+                </div>
+                <p-dataTable [value]="persons" [immutable]="false" [rows]="10" [globalFilter]="gbSearch">
+                    <p-column *ngFor="let col of cols" [field]="col.field" [header]="col.header" [filter]="col.filter" [filterPlaceholder]="col.filterPlaceholder"></p-column>
+                </p-dataTable>
+            </div>
+            
+        </div>
+    </div>
+</div>-->
