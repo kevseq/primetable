@@ -120,39 +120,40 @@ export class NewcomponentoneComponent implements OnInit {
       });
     }
   
-    
-    /*
-City: <>
-Type: Sedan / Hatchback / Hybrid --> <>
-type: [
-{label: "Sedan",
-value: "sedan",
-}, {
-label: "hatchback / Big Car",
-value: "hatchback"
-}, {
-label: Hybrid / Electric Cars",
-value: "hybrid"
-}
+searchClick1(){
+        console.log("Search Clicked");
+        this.displayPagination = true;
+        this.cols = [{ field: 'userName', header: 'Name' },
+                     { field: 'loginId', header: 'Login ID' },
+                     { field: 'mobile', header: 'Mobile' },
+                     { field: 'departmentBid', header: 'Dept' }
+                    ];
+       
+
+            
+            this.userSearch = [
+    {
+        "userName": "abc",
+        "loginId": "testlogin",
+        "mobile": "1234",
+        "departmentBid": "1h212h",
+    }, {
+        "userName": "xabc",
+        "loginId": "xtestlogin",
+        "mobile": "01234",
+        "departmentBid": "x1h212h",
+    }, {
+        "userName": "zabc",
+        "loginId": "ztestlogin",
+        "mobile": "91234",
+        "departmentBid": "z1h212h",
+    }
 ]
-Manufacturer: Honda / Tesla / GM --> <>
+        /*if(this.selectedName && this.selectedName != "" && this.selectedLogin )
+        this.userSearch = this.userSearch.filter( x => x.userName == this.selectedName && x.loginId == this.selectedLogin); */
+    }
+}    
 
-
-Data: test.json
-*/
-}
-
-
-
-Name: 
-city:
-phone number:
-
-
-
-Name: ABC
-city: xyz
-phone : 123
 
 
 this.filteredCars = this.cars.filter(function(car) {
