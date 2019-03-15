@@ -67,3 +67,270 @@
 
 
 </p-table>
+
+
+_--------------------
+
+
+<div class="container-fluid">
+    <div class="master-wrapper">
+        <div class="col-12 header-band">
+
+        </div>
+        <div class="master-container">
+            <form class="">
+                <div class="row d-flex align-items-start" *ngIf="!showAllparameters">
+
+                    <div class="form-group col-3" *ngIf="isDisplayBorrowerFields('CUSTOMER_GROUP')">
+                        <label class="form-control-label" for="customerGroup">
+                            <span>Customer Group</span>
+                        </label>
+                        <p-dropdown class="form-control" appendTo="body" name="customerGroup"
+                            [(ngModel)]="customerGroup" optionLabel="value" [autoDisplayFirst]=false
+                            [options]="groupDetailsList" [filter]="true" [showClear]="true"></p-dropdown>
+                    </div>
+
+                    <div>
+                        <span *ngFor="let field of displaySearchFields">
+                            <dynamic-component [componentToRender]="field.searchParameter" (componentOutput)="mapToOutput($event, field.searchParameter)"></dynamic-component>
+                        </span>
+                    </div>
+                    <div><button (click)="loadMoreData()"> show More </button></div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+±+++++++++++++++++++
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-global-search',
+  templateUrl: './global-search.component.html'
+})
+export class GlobalSearchComponent implements OnInit {
+
+  stageNameArrList: Object[] = [];
+  declinedDate: any;
+  initiatedBy: any;
+  customerGroup: any;
+  proposalStatus: any;
+  parentCompany: any;
+  stageName: any;
+  sanctionedFinalizedDate: any;
+  initiationDate: any;
+  workflowIdsArrList: any;
+  natureOfWorkflow: any;
+  parentAssessmentId: any;
+  assessmentId: any;
+  proposalId: any;
+  selectedProposal: any;
+  location: { id: any; bid: any; locName: any; locationType: any; locationCode: any; };
+  subRequestType: any;
+  businessGroupListArr: any;
+  groupDetailsListArr: any;
+  pendingUserAssignTo: any;
+  proposalStatusDropdownList: { label: string; value: string; }[];
+  workflowStatusList: any;
+  natureOfWorkflowDropdownList: { label: string; value: string; }[];
+  rootProposalId: any;
+  proposalGridFields: any;
+  errorList: any;
+  screen: string = "losApiGatewayApp.container.globalSearch";
+  globalSearchFields: any;
+  product: any;
+  businessSubSegment: any;
+  businessGroup: any;
+  workflowId: string;
+  productList: any;
+  businessSegmentList: any;
+  groupDetailsList: any;
+  userListArr: any;
+  workflowStatus: any;
+  businessSegment: any;
+  businessSubSegmentList: any[];
+  requestType: any;
+  subRequestTypeArr: any;
+  applicationType;
+  requestTypeArr: any;
+  reqTypeList: any;
+  applicationTypeList: any;
+  userArrList: any;
+  alertMessage: string;
+  alertType: string = 'danger';
+  transactionIdArr: any = [];
+  proposalDetailsHeaderList: any[];
+  proposalDetailsArr: any;
+  borrowerActionTypeProposal = '';
+  applicationTypeListProposal: any;
+  applicationTypeListBorrower: any;
+  borrowerSearchDetailsArrList: any;
+  _isResponseReady: boolean;
+  borrowerActionType = '';
+  borrowerSearch = 'CPS';
+  borrowerName = '';
+  borrowerCode = '';
+  pan = '';
+  cin = '';
+  cifId = ''
+  totalItems: number = 5;
+  page: number = 1;
+  itemsPerPage: number = 5000;
+  language: string = 'en';
+  sortBy: string = 'id';
+  sortOrder: string = 'asc';
+  borrowerDetailsHeaderList;
+  selectedBorrowerDetail;
+  showAllparameters: boolean;
+   
+
+  displaySearchFields: any[] = [];
+
+
+  constructor(
+  ) { }
+
+  ngOnInit() {
+
+
+
+    this.proposalStatusDropdownList = [
+      { label: 'Hold', value: 'HOLD' },
+      { label: 'Discarded', value: 'DISCARDED' },
+      { label: 'Withdrawn', value: 'WITHDRAWN' },
+      { label: 'PSM Discarded', value: 'PSMDISCARDED' },
+      { label: 'Inprogress', value: 'INPROGRESS' },
+      { label: 'Declined', value: 'DECLINED' },
+      { label: 'Sanctioned', value: 'SANCTIONED' },
+    ]
+
+    this.getGlobalSearchFields();
+  }
+
+  private getGlobalSearchFields() {
+    this._isResponseReady = false;
+    this.globalSearchFields = [{
+      "searchParameter": "CUSTOMER_GROUP",
+      "paramSequence": 4
+    }, {
+      "searchParameter": "CIN_NO",
+      "paramSequence": 3
+    }, {
+      "searchParameter": "PAN_NUMBER",
+      "paramSequence": 1
+    }, {
+      "searchParameter": "BORROWER_NAME",
+      "paramSequence": 0
+    }, {
+      "searchParameter": "BORROWER_CODE",
+      "paramSequence": 2
+    }
+    ]
+
+    this.globalSearchFields.sort(function(a,b) {
+        return a.paramSequence - b.paramSequence;
+    });
+
+    this.displaySearchFields =   Array.from(this.globalSearchFields);
+    this.displaySearchFields.splice(2,4);
+
+    console.log("globalSearchFields.length", this.globalSearchFields.length);
+
+  }
+
+  mapToOutput(event:any, component:any){
+     let val = event.target.value;
+     if(component == "BORROWER_NAME"){
+         this.borrowerName = val;
+     }
+  }
+
+  private isDisplayBorrowerFields(key) {
+    let obj;
+    if (this.globalSearchFields && this.globalSearchFields.length && key)
+      obj = this.globalSearchFields.find(ele => {
+        if (ele.searchParameter === key)
+          return ele;
+      })
+
+    return obj ? true : false;
+  }
+
+  
+
+
+
+  private formReset() {
+    this.applicationType = null;
+    this.pendingUserAssignTo = null;
+    this.borrowerCode = null;
+    this.borrowerName = null;
+    this.businessGroup = null;
+    this.businessSegment = null;
+    this.businessSubSegment = null;
+    this.cifId = null;
+    this.cin = null;
+    this.customerGroup = null;
+    this.declinedDate = null;
+    this.initiatedBy = null;
+    this.initiationDate = null;
+    this.subRequestType = null;
+    this.natureOfWorkflow = null;
+    this.pan = null;
+    this.parentCompany = null;
+    this.parentAssessmentId = null;
+    this.assessmentId = null;
+    this.workflowStatus = null;
+    this.product = null;
+    this.proposalId = null;
+    this.location = null;
+    this.proposalStatus = null;
+    this.requestType = null;
+    this.rootProposalId = null;
+    this.sanctionedFinalizedDate = null;
+    this.stageName = null;
+    this.workflowId = null;
+  }
+
+  private getBulkIds(event, id) {
+    if (this.transactionIdArr.indexOf(id) !== -1 && !event.target.checked) {
+      this.transactionIdArr.splice(this.transactionIdArr.indexOf(id), 1);
+      return;
+    }
+    else if (this.transactionIdArr.indexOf(id) === -1 && event.target.checked) {
+      this.transactionIdArr.push(id);
+    }
+  }
+
+  private selectAll(isSelected) {
+    if (!isSelected) {
+      this.transactionIdArr = [];
+      return;
+    }
+    this.proposalDetailsArr.forEach(element => {
+      if (this.transactionIdArr.indexOf(element.transactionId) === -1)
+        this.transactionIdArr.push(element.transactionId);
+    });
+  }
+
+  private getDateFromObject(value) {
+    value = value.substring(0, 10).split("-");
+    let dateObj = {};
+    dateObj['year'] = Number(value[0]);
+    dateObj['month'] = Number(value[1]);
+    dateObj['day'] = Number(value[2]);
+    return dateObj;
+  }
+
+  loadMoreData(){
+      this.displaySearchFields = this.globalSearchFields;
+  }
+
+
+
+
+
+}
